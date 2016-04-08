@@ -1,5 +1,5 @@
 var net 			= require('net');
-var sockets 	= {};
+var SocketsObject 	= {};
 var chatRooms = {gibson:[], fender:[]};
 const commands 	= require('./app/helpers/handleCommands.js');
 
@@ -15,18 +15,18 @@ function receiveData(socket, data) {
 		commands.handleBye(socket);
 	}
 	else if(cleanData === "!LEAVE") {
-		commands.handleLeave(socket, cleanData, chatRooms, sockets);
+		commands.handleLeave(socket, chatRooms, SocketsObject, false);
 	}
   else if(cleanData === "!ROOMS") {
     commands.handleRooms(socket, chatRooms);
 	}
 	else if (!socket.usernameSet){
-    if(cleanData in sockets){
+    if(cleanData in SocketsObject){
       socket.write('- Username already being used\n');
     }else{
       socket.write('- howdy: ' + cleanData + '\n');
       socket.username = cleanData;
-      sockets[cleanData] = socket;
+      SocketsObject[cleanData] = socket;
 
       socket.usernameSet = true;
     }
@@ -40,7 +40,7 @@ function receiveData(socket, data) {
       socket.chatRoom === cleanData;
 
 			chatRooms[cleanData].forEach(function(user){
-				sockets[user].write('- '+ socket.username + ' ENTERED the room\n');
+				SocketsObject[user].write('- '+ socket.username + ' ENTERED the room\n');
 			});
 
       chatRooms[cleanData].push(socket.username);
@@ -49,7 +49,7 @@ function receiveData(socket, data) {
 
 
       checkIfUsernameChatRoomSet(socket);
-			console.log(sockets);
+			console.log(SocketsObject);
 			console.log(chatRooms);
     }
   }
@@ -63,7 +63,7 @@ function sendMsgToAllUsers(socket, data){
   usersInRoom.forEach(function(user){
     console.log(user);
 
-    var socketInRoom = sockets[user];
+    var socketInRoom = SocketsObject[user];
     socketInRoom.write('- ' + socket.username + ': ' + data);
   });
 
@@ -81,11 +81,10 @@ function checkIfUsernameChatRoomSet(socket){
 
 function closeSocket(socket) {
 	if(socket.charRoom !== 'NONE'){
-		var indexOfuserInRoom = chatRooms[socket.chatRoom].indexOf(socket.username);
-		chatRooms[socket.chatRoom].splice(indexOfuserInRoom, 1);
+		commands.handleLeave(socket, chatRooms, SocketsObject, true);
 	}
-	delete sockets[socket.username];
-	console.log(sockets);
+	delete SocketsObject[socket.username];
+	console.log(SocketsObject);
 	console.log(chatRooms);
 };
 

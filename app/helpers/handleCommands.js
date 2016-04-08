@@ -10,7 +10,7 @@ module.exports = {
     }
   },
 
-  handleLeave: function(socket, data, chatRooms, sockets){
+  handleLeave: function(socket, chatRooms, socketsObject, calledFromSocketEnd){
     if(socket.chatRoom !== 'NONE'){
     	socket.write('- Left room: ' + socket.chatRoom + '\n');
 			var indexOfuserInRoom = chatRooms[socket.chatRoom].indexOf(socket.username);
@@ -20,8 +20,10 @@ module.exports = {
 			console.log(currentRoom);
 			chatRooms[currentRoom].forEach(function(user){
 				console.log(user);
-				sockets[user].write('- '+ socket.username + ' LEFT the room\n');
+				SocketsObject[user].write('- '+ socket.username + ' LEFT the room\n');
 			});
+
+      if(calledFromSocketEnd) return;
 		}else{
 			socket.write('- You are not in any room currently\n');
 		}
