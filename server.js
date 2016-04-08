@@ -49,6 +49,8 @@ function receiveData(socket, data) {
 
 
       checkIfUsernameChatRoomSet(socket);
+			console.log(sockets);
+			console.log(chatRooms);
     }
   }
   else{
@@ -83,6 +85,8 @@ function closeSocket(socket) {
 		chatRooms[socket.chatRoom].splice(indexOfuserInRoom, 1);
 	}
 	delete sockets[socket.username];
+	console.log(sockets);
+	console.log(chatRooms);
 };
 
 
