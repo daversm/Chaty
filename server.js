@@ -105,8 +105,6 @@ function newSocket(socket) {
 		closeSocket(socket);
 	});
 
-  socket.write('Your Id is: ' + socket.id);
-  */
 };
 
 var server = net.createServer(newSocket);
