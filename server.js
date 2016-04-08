@@ -1,7 +1,7 @@
-var net = require('net');
-var rl = require('readline');
-var sockets = {};
+var net 			= require('net');
+var sockets 	= {};
 var chatRooms = {gibson:[], fender:[]};
+const commands 	= require('./app/helpers/handleCommands.js');
 
 function cleanInput(data) {
 	return data.toString().replace(/(\r\n|\n|\r)/gm,"");
@@ -12,16 +12,13 @@ function receiveData(socket, data) {
 
 	var cleanData = cleanInput(data);
 	if(cleanData === "!BYE") {
-    socket.write('- Disconnected with Chaty!\n');
-    socket.end();
+		commands.handleBye(socket);
+	}
+	else if(cleanData === "!LEAVE") {
+		commands.handleLeave(socket, cleanData, chatRooms, sockets);
 	}
   else if(cleanData === "!ROOMS") {
-    socket.write('- Active chat rooms: \n');
-    Object.keys(chatRooms).forEach(function(key){
-      socket.write('-   ' +  key + '(' + chatRooms[key].length + ')' + '\n');
-    });
-    socket.write('- End of list \n');
-    checkIfUsernameChatRoomSet(socket);
+    commands.handleRooms(socket, chatRooms);
 	}
 	else if (!socket.usernameSet){
     if(cleanData in sockets){
@@ -41,10 +38,15 @@ function receiveData(socket, data) {
       checkIfUsernameChatRoomSet(socket);
     }else{
       socket.chatRoom === cleanData;
+
+			chatRooms[cleanData].forEach(function(user){
+				sockets[user].write('- '+ socket.username + ' ENTERED the room\n');
+			});
+
       chatRooms[cleanData].push(socket.username);
       socket.chatRoom = cleanData;
-      console.log(chatRooms);
       socket.write('- Entering room: ' + cleanData + '\n');
+
 
       checkIfUsernameChatRoomSet(socket);
     }
@@ -60,7 +62,7 @@ function sendMsgToAllUsers(socket, data){
     console.log(user);
 
     var socketInRoom = sockets[user];
-    socketInRoom.write(socket.username + ': ' + data);
+    socketInRoom.write('- ' + socket.username + ': ' + data);
   });
 
 };
