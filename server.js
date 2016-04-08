@@ -78,18 +78,16 @@ function checkIfUsernameChatRoomSet(socket){
 }
 
 function closeSocket(socket) {
-	/*
-	var i = sockets.indexOf(socket);
-	if (i != -1) {
-		sockets.splice(i, 1);
+	if(socket.charRoom !== 'NONE'){
+		var indexOfuserInRoom = chatRooms[socket.chatRoom].indexOf(socket.username);
+		chatRooms[socket.chatRoom].splice(indexOfuserInRoom, 1);
 	}
-	*/
+	delete sockets[socket.username];
 };
 
 
 function newSocket(socket) {
-  console.log("new Connection");
-  socket.id = Math.random() * 1000;
+  //console.log("new Connection");
   socket.usernameSet = false;
   socket.chatRoom = 'NONE';
 
