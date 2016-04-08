@@ -78,10 +78,12 @@ function checkIfUsernameChatRoomSet(socket){
 }
 
 function closeSocket(socket) {
+	/*
 	var i = sockets.indexOf(socket);
 	if (i != -1) {
 		sockets.splice(i, 1);
 	}
+	*/
 };
 
 
@@ -98,7 +100,7 @@ function newSocket(socket) {
 	socket.on('data', function(data) {
 		receiveData(socket, data);
 	});
-  /*
+
 	socket.on('end', function() {
 		closeSocket(socket);
 	});
