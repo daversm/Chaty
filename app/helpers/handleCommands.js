@@ -6,7 +6,21 @@ module.exports = {
     }
     else if(socket.chatRoom === 'NONE'){
       socket.write('- Pick a chat room (use !ROOMS to see all rooms):\n');
-
+    }
+  },
+  handlePrivate: function(socket, socketsObject, chatRooms, cleanData){
+    var arrayOfData = cleanData.split(" ");
+    var sendToUser = arrayOfData[1];
+    if(socket.usernameSet === false || socket.chatRoom === 'NONE'){
+      socket.write('- Must be in a room to send private message\n')
+      this.checkIfUsernameChatRoomSet(socket);
+    }
+    else if(chatRooms[socket.chatRoom].indexOf(sendToUser) != -1){
+      var msg = arrayOfData.slice(2, arrayOfData.length).join(" ");
+      socketsObject[sendToUser].write('- PRIVATE message from ' + socket.username + ': ' + msg +'\n' );
+    }
+    else{
+      socket.write('- user: ' + sendToUser + ' is not in this room\n');
     }
   },
 

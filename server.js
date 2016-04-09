@@ -30,6 +30,9 @@ function receiveData(socket, data) {
   else if(cleanData === "!ROOMS") {
     commands.handleRooms(socket, chatRooms);
 	}
+	else if(cleanData.split(" ")[0] === "!PRIVATE"){
+		commands.handlePrivate(socket, socketsObject, chatRooms, cleanData);
+	}
 	else if (!socket.usernameSet){
 		isUserAndRoomSet.setUsername(cleanData, socket, socketsObject);
   }

@@ -34,7 +34,7 @@ module.exports = {
 
       chatRooms[cleanData].push(socket.username);
       socket.chatRoom = cleanData;
-      socket.write('- Entering room: ' + cleanData + '\n');
+      socket.write('- You are now in room: ' + cleanData + ' (use !USERS to see active users)\n');
 
       this.checkIfUsernameChatRoomSet(socket);
 			console.log(Object.keys(socketsObject));
