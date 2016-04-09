@@ -33,6 +33,26 @@ module.exports = {
     socket.write('- Disconnected with Chaty!\n');
     socket.end();
   },
+  handleHelp: function(socket){
+    socket.write('- !BYE : exit chaty \n');
+		socket.write('- !LEAVE : leave a chat room \n');
+    socket.write('- !USERS : list of users in room \n');
+		socket.write('- !ROOMS : list of rooms \n');
+		socket.write('- !HELP : list of commands \n');
+    this.checkIfUsernameChatRoomSet(socket);
+  },
+  handleUsers: function(socket, chatRooms){
+    if(socket.chatRoom !== 'NONE'){
+      socket.write('- List of users in room\n');
+      chatRooms[socket.chatRoom].forEach(function(user){
+        socket.write('-   ' + user + '\n');
+      });
+      socket.write('- End of list\n');
+    }else{
+      socket.write('- Need to be in a chat room to see users\n');
+      this.checkIfUsernameChatRoomSet(socket);
+    }
+  },
 
   handleRooms: function(socket, chatRooms){
     socket.write('- Active chat rooms: \n');

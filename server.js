@@ -15,6 +15,12 @@ function receiveData(socket, data) {
 		//console.log("EOT ERROR");
 		return;
 	}
+	else if(cleanData === "!HELP"){
+		commands.handleHelp(socket);
+	}
+	else if(cleanData === "!USERS"){
+		commands.handleUsers(socket, chatRooms);
+	}
 	else if(cleanData === "!BYE") {
 		commands.handleBye(socket, socketsObject, chatRooms);
 	}
@@ -50,7 +56,7 @@ function closeSocket(socket) {
 function newSocket(socket) {
   socket.usernameSet = false;
   socket.chatRoom = 'NONE';
-	socket.write('- Welcome to Chaty\n');
+	socket.write('- Welcome to Chaty (use !HELP for list of commands)\n');
   socket.write('- Pick a username: \n');
 
 	socket.on('error', function(err){
