@@ -17,22 +17,94 @@ body, html {
 
 }
 
-.chatBox{
+.main{
+  margin-top: -10px;
+  display: flex;
   width: 80%;
   height: 80%;
+  flex-direction: column;
+}
+
+.title{
+  display: flex;
+  height: 60px;
+  align-items: center;
+  justify-content: center;
+  color: #8E8E8E;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600px;
+  font-size: 45px;
+
+}
+
+.chatBox{
+  flex-grow: 1;
   display: flex;
   flex-direction: row;
+  box-shadow: 0px 0px 4px 0px #9E9E9E;
+  border-radius: 5px;
 
 }
 
 .typingBox{
-  background-color: gray;
+  display: flex;
   flex-grow: 1;
-  flex-shrink:0;
+  flex-direction: column;
 }
 
 .chatRooms{
-  background-color: blue;
-  flex-grow: 1;
+  width: 200px;
+  border-right: 1px solid #D0D0D0;
   flex-shrink:0;
+}
+.dialog{
+  display: flex;
+  flex-grow: 1;
+  display: flex;
+  flex-grow: 1;
+
+}
+.userType{
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+  height: 46px;
+}
+
+input[type='text']{
+  font-size: 30px;
+  font-weight: 200;
+  border: none;
+  border-radius: 2px;
+  border: 1px solid #D0D0D0;
+  padding: 3px;
+  position: relative;
+  width: 97%;
+  height: 40px;
+  color:gray;
+}
+
+input[type='text']:focus{
+  outline: 0;
+}
+
+input#doneButton{
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  padding: 8px;
+  min-width: 130px;
+  height: 48px;
+  -webkit-appearance: none;
+  outline: none;
+  border: solid 2px #46B5FF;
+  border-radius: 2px;
+  font-weight: 400;
+  color: white;
+  margin-left: 4px;
+  transition: box-shadow 100ms ease;
+  background: #46B5FF;
+}
+input#doneButton:hover{
+  background: #25A7FD;
+  border: solid 2px #25A7FD;
 }

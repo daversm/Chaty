@@ -18,9 +18,34 @@ var Chaty = _react2.default.createClass({
   render: function render() {
     return _react2.default.createElement(
       'div',
-      { className: 'chatBox' },
-      _react2.default.createElement('div', { className: 'chatRooms' }),
-      _react2.default.createElement('div', { className: 'typingBox' })
+      { className: 'main' },
+      _react2.default.createElement(
+        'div',
+        { className: 'title' },
+        'talkin folk'
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'chatBox' },
+        _react2.default.createElement('div', { className: 'chatRooms' }),
+        _react2.default.createElement(
+          'div',
+          { className: 'typingBox' },
+          _react2.default.createElement('div', { className: 'dialog' }),
+          _react2.default.createElement(
+            'div',
+            { className: 'userType' },
+            _react2.default.createElement('input', {
+              type: 'text',
+              placeholder: 'username:',
+              label: 'email',
+              value: this.state.email,
+              onChange: this.handleUserNameChange
+            }),
+            _react2.default.createElement('input', { id: 'doneButton', type: 'submit', value: 'send' })
+          )
+        )
+      )
     );
   }
 });

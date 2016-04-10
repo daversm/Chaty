@@ -8,9 +8,24 @@ var Chaty = React.createClass({
   },
   render:function(){
     return (
-      <div className="chatBox">
-        <div className="chatRooms"></ div>
-        <div className="typingBox"></ div>
+      <div className="main">
+        <div className="title">talkin folk</div>
+        <div className="chatBox">
+          <div className="chatRooms"></ div>
+          <div className="typingBox">
+            <div className="dialog"></div>
+            <div className="userType">
+              <input
+                type="text"
+                placeholder="username:"
+                label="email"
+                value={this.state.email}
+                onChange={this.handleUserNameChange}
+              />
+            <input id="doneButton" type="submit" value="send" />
+            </div>
+          </ div>
+        </ div>
       </ div>
     );
   }
