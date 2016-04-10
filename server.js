@@ -29,10 +29,10 @@ function receiveData(socket, data) {
 		commands.handleUsers(socket, chatRooms);
 	}
 	else if(cleanData === "!BYE") {
-		commands.handleBye(socket, socketsObject, chatRooms);
+		commands.handleBye(socket, socketsObject, chatRooms, io);
 	}
 	else if(cleanData === "!LEAVE") {
-		commands.handleLeave(socket, chatRooms, socketsObject, false);
+		commands.handleLeave(socket, chatRooms, socketsObject, io);
 	}
   else if(cleanData === "!ROOMS") {
     commands.handleRooms(socket, chatRooms);
@@ -44,7 +44,7 @@ function receiveData(socket, data) {
 		isUserAndRoomSet.setUsername(cleanData, socket, socketsObject);
   }
   else if(socket.chatRoom === 'NONE'){
-    isUserAndRoomSet.setChatroom(cleanData, socket, socketsObject, chatRooms)
+    isUserAndRoomSet.setChatroom(cleanData, socket, socketsObject, chatRooms, io)
   }
   else{
 		var usersInRoom = chatRooms[socket.chatRoom];
@@ -52,16 +52,16 @@ function receiveData(socket, data) {
 	  usersInRoom.forEach(function(user){
 	    var socketInRoom = socketsObject[user];
 			if(socketInRoom.isWebSocket === true){
-				socketInRoom.emit('chat message', socket.username + ': ' + data);
+				socketInRoom.emit('chat message', socket.username + ': ' + cleanData);
 			}else{
-	    	socketInRoom.write('- ' + socket.username + ': ' + data);
+	    	socketInRoom.write('- ' + socket.username + ': ' + cleanData  + '\n');
 			}
 	  });
   }
 };
 
 function closeSocket(socket) {
-	commands.handleUpdateChatRooms(socket, socketsObject, chatRooms);
+	commands.handleUpdateChatRooms(socket, socketsObject, chatRooms, io);
 	delete socketsObject[socket.username];
 	console.log(Object.keys(socketsObject));
 	console.log(chatRooms);
@@ -73,8 +73,16 @@ function handleWebSocket(socket, msg){
 	if(socket.usernameSet === false){
 		isUserAndRoomSet.setUsername(cleanData, socket, socketsObject);
 	}else{
+		var usersInRoom = chatRooms[socket.chatRoom];
 
-	socket.emit('chat message', msg);
+	  usersInRoom.forEach(function(user){
+	    var socketInRoom = socketsObject[user];
+			if(socketInRoom.isWebSocket){
+				socketInRoom.emit('chat message', socket.username + ': ' + cleanData);
+			}else{
+	    	socketInRoom.write('- ' + socket.username + ': ' + cleanData + '\n');
+			}
+	  });
 	}
 }
 
@@ -104,6 +112,10 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
+	socket.on('error', function(){
+
+  });
+
   console.log('a user connected');
 	socket.isWebSocket = true;
 	socket.usernameSet = false;
@@ -118,8 +130,19 @@ io.on('connection', function(socket){
   });
 
 	socket.on('selectRoom', function(room){
-    isUserAndRoomSet.setChatroom(room, socket, socketsObject, chatRooms);
+		if(socket.usernameSet){
+			commands.handleLeave(socket, chatRooms, socketsObject, io);
+    	isUserAndRoomSet.setChatroom(room, socket, socketsObject, chatRooms, io);
+		}else{
+			isUserAndRoomSet.checkIfUsernameChatRoomSet(socket);
+		}
   });
+
+	socket.on('disconnect', function(){
+		commands.handleUpdateChatRooms(socket, socketsObject, chatRooms, io);
+    delete socketsObject[socket.username];
+  });
+
 
 });
 

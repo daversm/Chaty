@@ -24,26 +24,52 @@ module.exports = {
     }
   },
 
-  handleLeave: function(socket, chatRooms, socketsObject){
-    if(socket.chatRoom !== 'NONE'){
-    	socket.write('- Left room: ' + socket.chatRoom + '\n');
-			var indexOfuserInRoom = chatRooms[socket.chatRoom].indexOf(socket.username);
-			chatRooms[socket.chatRoom].splice(indexOfuserInRoom,1);
-			var currentRoom = socket.chatRoom;
-			socket.chatRoom = 'NONE';
-			console.log(currentRoom);
-			chatRooms[currentRoom].forEach(function(user){
-				console.log(user);
-				socketsObject[user].write('- '+ socket.username + ' LEFT the room\n');
-			});
-		}else{
-			socket.write('- You are not in any room currently\n');
-		}
-		this.checkIfUsernameChatRoomSet(socket);
+  handleLeave: function(socket, chatRooms, socketsObject, io){
+    if(socket.isWebSocket === true){
+      if(socket.chatRoom !== 'NONE'){
+      	socket.emit('chat message', 'Left room: ' + socket.chatRoom);
+  			var indexOfuserInRoom = chatRooms[socket.chatRoom].indexOf(socket.username);
+  			chatRooms[socket.chatRoom].splice(indexOfuserInRoom,1);
+  			var currentRoom = socket.chatRoom;
+  			socket.chatRoom = 'NONE';
+  			console.log(currentRoom);
+  			chatRooms[currentRoom].forEach(function(user){
+  				console.log(user);
+          if(socketsObject[user].isWebSocket === true){
+            socketsObject[user].emit('chat message', socket.username + ' LEFT the room');
+          }else{
+  				  socketsObject[user].write('- '+ socket.username + ' LEFT the room\n');
+          }
+  			});
+  		}
+    }else{
+      if(socket.chatRoom !== 'NONE'){
+      	socket.write('- Left room: ' + socket.chatRoom + '\n');
+  			var indexOfuserInRoom = chatRooms[socket.chatRoom].indexOf(socket.username);
+  			chatRooms[socket.chatRoom].splice(indexOfuserInRoom,1);
+  			var currentRoom = socket.chatRoom;
+  			socket.chatRoom = 'NONE';
+  			console.log(currentRoom);
+  			chatRooms[currentRoom].forEach(function(user){
+  				console.log(user);
+          if(socketsObject[user].isWebSocket === true){
+            socketsObject[user].emit('chat message', socket.username + ' LEFT the room');
+          }else{
+  				  socketsObject[user].write('- '+ socket.username + ' LEFT the room\n');
+          }
+  			});
+  		}else{
+  			socket.write('- You are not in any room currently\n');
+		  }
+
+      this.checkIfUsernameChatRoomSet(socket);
+    }
+    io.emit('chatRoomsList', chatRooms);
+
   },
 
-  handleBye: function(socket, socketsObject, chatRooms){
-    this.handleUpdateChatRooms(socket, socketsObject, chatRooms);
+  handleBye: function(socket, socketsObject, chatRooms, io){
+    this.handleUpdateChatRooms(socket, socketsObject, chatRooms, io);
     socket.write('- Disconnected with Chaty!\n');
     socket.end();
   },
@@ -77,16 +103,21 @@ module.exports = {
     this.checkIfUsernameChatRoomSet(socket);
   },
 
-  handleUpdateChatRooms: function(socket, socketsObject, chatRooms){
+  handleUpdateChatRooms: function(socket, socketsObject, chatRooms, io){
     if(socket.chatRoom !== 'NONE'){
 			var indexOfuserInRoom = chatRooms[socket.chatRoom].indexOf(socket.username);
 			chatRooms[socket.chatRoom].splice(indexOfuserInRoom,1);
 			var currentRoom = socket.chatRoom;
 			socket.chatRoom = 'NONE';
 			chatRooms[currentRoom].forEach(function(user){
-				socketsObject[user].write('- '+ socket.username + ' LEFT the room\n');
+        if(socketsObject[user].isWebSocket){
+  				socketsObject[user].emit('chat message', socket.username + ' LEFT the room');
+  			}else{
+				  socketsObject[user].write('- '+ socket.username + ' LEFT the room\n');
+        }
 			});
 		}
+    io.emit('chatRoomsList', chatRooms);
   }
 
 };

@@ -41,7 +41,7 @@ module.exports = {
     this.checkIfUsernameChatRoomSet(socket);
   },
 
-  setChatroom: function(cleanData, socket, socketsObject, chatRooms){
+  setChatroom: function(cleanData, socket, socketsObject, chatRooms, io){
     if(socket.isWebSocket === true){
       if(! (cleanData in chatRooms)){
         socket.emit('chat message', 'error entering room');
@@ -73,7 +73,12 @@ module.exports = {
         socket.chatRoom === cleanData;
 
   			chatRooms[cleanData].forEach(function(user){
-  				socketsObject[user].write('- '+ socket.username + ' ENTERED the room\n');
+          if(socketsObject[user].isWebSocket){
+            console.log('YUP YUP YUP');
+            socketsObject[user].emit('chat message', socket.username + ' ENTERED the room');
+          }else{
+  				  socketsObject[user].write('- '+ socket.username + ' ENTERED the room\n');
+          }
   			});
 
         chatRooms[cleanData].push(socket.username);
@@ -85,6 +90,7 @@ module.exports = {
   			console.log(chatRooms);
       }
     }
+    io.emit('chatRoomsList', chatRooms);
   }
 
 };
