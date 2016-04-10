@@ -1,8 +1,15 @@
 var net 					   = require('net');
+var express          = require('express');
 var socketsObject 	 = {};
 var chatRooms			   = {gibson:[], fender:[]};
 var commands		 	   = require('./app/helpers/handleCommands');
 var isUserAndRoomSet = require('./app/helpers/isUsernameAndChatroomSet');
+var server 					 = net.createServer(newSocket);
+var app 						 = express();
+var http 						 = require('http').Server(app);
+var io 							 = require('socket.io')(http);
+
+app.use("/public", express.static('app/public'));
 
 function cleanInput(data) {
 	return data.toString().replace(/(\r\n|\n|\r)/gm,"");
@@ -44,7 +51,11 @@ function receiveData(socket, data) {
 
 	  usersInRoom.forEach(function(user){
 	    var socketInRoom = socketsObject[user];
-	    socketInRoom.write('- ' + socket.username + ': ' + data);
+			if(socketInRoom.isWebSocket === true){
+				socketInRoom.emit('chat message', socket.username + ': ' + data);
+			}else{
+	    	socketInRoom.write('- ' + socket.username + ': ' + data);
+			}
 	  });
   }
 };
@@ -56,9 +67,21 @@ function closeSocket(socket) {
 	console.log(chatRooms);
 };
 
+function handleWebSocket(socket, msg){
+	var cleanData = cleanInput(msg);
+
+	if(socket.usernameSet === false){
+		isUserAndRoomSet.setUsername(cleanData, socket, socketsObject);
+	}else{
+
+	socket.emit('chat message', msg);
+	}
+}
+
 function newSocket(socket) {
   socket.usernameSet = false;
   socket.chatRoom = 'NONE';
+	socket.isWebSocket = false;
 	socket.write('- Welcome to Chaty (use !HELP for list of commands)\n');
   socket.write('- Pick a username: \n');
 
@@ -76,10 +99,32 @@ function newSocket(socket) {
 	});
 };
 
-var server = net.createServer(newSocket);
+app.get('/', function(req, res){
+  res.sendfile('./app/views/index.html');
+});
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+	socket.isWebSocket = true;
+	socket.usernameSet = false;
+  socket.chatRoom = 'NONE';
+
+	socket.emit('chat message', 'Howdy there');
+	socket.emit('chat message', 'Please pick a username');
+
+	socket.on('chat message', function(msg){
+    handleWebSocket(socket, msg);
+
+  });
+
+});
 
 server.on('error', function(err){
 	console.log('------------------there was an error : server');
+});
+
+http.listen(8080, function(){
+  console.log('listening on *:8080');
 });
 
 server.listen(8888);

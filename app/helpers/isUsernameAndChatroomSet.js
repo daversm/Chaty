@@ -1,21 +1,41 @@
 module.exports = {
   checkIfUsernameChatRoomSet: function(socket){
-    if (!socket.usernameSet){
-      socket.write('- Pick a username:\n');
-    }
-    else if(socket.chatRoom === 'NONE'){
-      socket.write('- Pick a chat room (use !ROOMS to see all rooms):\n');
+    if(socket.isWebSocket === true){
+      if (!socket.usernameSet){
+        socket.emit('chat message', 'Pick a username');
+      }
+      else if(socket.chatRoom === 'NONE'){
+        socket.emit('chat message', 'pick a chat room');
+      }
+    }else{
+      if (!socket.usernameSet){
+        socket.write('- Pick a username:\n');
+      }
+      else if(socket.chatRoom === 'NONE'){
+        socket.write('- Pick a chat room (use !ROOMS to see all rooms):\n');
+      }
     }
   },
 
   setUsername: function(cleanData, socket, socketsObject){
-    if(cleanData in socketsObject){
-      socket.write('- Username already being used\n');
+    if(socket.isWebSocket === true){
+      if(cleanData in socketsObject){
+        socket.emit('chat message', 'The username - '+ cleanData + ' - is taken');
+      }else{
+        socket.emit('chat message', 'Alrighty your username : ' + cleanData);
+        socket.username = cleanData;
+        socketsObject[cleanData] = socket;
+        socket.usernameSet = true;
+      }
     }else{
-      socket.write('- howdy: ' + cleanData + '\n');
-      socket.username = cleanData;
-      socketsObject[cleanData] = socket;
-      socket.usernameSet = true;
+      if(cleanData in socketsObject){
+        socket.write('- Username already being used\n');
+      }else{
+        socket.write('- howdy: ' + cleanData + '\n');
+        socket.username = cleanData;
+        socketsObject[cleanData] = socket;
+        socket.usernameSet = true;
+      }
     }
 
     this.checkIfUsernameChatRoomSet(socket);

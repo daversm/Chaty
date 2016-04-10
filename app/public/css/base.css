@@ -1,13 +1,16 @@
 body, html {
   font-family: 'Roboto', sans-serif;
-  font-size: 15px;
+
   margin: 0px;
   padding: 0px;
   height: 100%;
   width: 100%;
   -webkit-font-smoothing: antialiased;
 }
-
+p{
+  margin-top:3px;
+  margin-bottom:3px;
+}
 #chatyDiv{
   width: 100%;
   height: 100%;
