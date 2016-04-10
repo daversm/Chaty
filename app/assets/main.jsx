@@ -24,16 +24,16 @@ var Chaty = React.createClass({
       out.handleUpdateMsgs(msg);
     });
 
+
+
     this.socket.on('chatRoomsList', function(rooms){
-      console.log(rooms);
+      //console.log(rooms);
       out.arrayOfRooms = Object.keys(rooms).map(function(room){
         return (
-          <Rooms title={room} count={rooms[room].length} />
+          <Rooms title={room} count={rooms[room].length} handleClick={out.handleSelectRoom} />
         )
       });
-
       out.forceUpdate();
-
     });
 
   },
@@ -53,6 +53,9 @@ var Chaty = React.createClass({
     });
     this.forceUpdate();
   },
+  handleSelectRoom(room){
+    this.socket.emit('selectRoom', room);
+  },
   render:function(){
 
     return (
@@ -60,6 +63,7 @@ var Chaty = React.createClass({
         <div className="title">talkin folk</div>
         <div className="chatBox">
           <div className="chatRooms">
+            <p className="large">rooms</p>
             {this.arrayOfRooms}
           </ div>
           <div className="typingBox">

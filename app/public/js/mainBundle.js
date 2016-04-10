@@ -42,11 +42,10 @@ var Chaty = _react2.default.createClass({
     });
 
     this.socket.on('chatRoomsList', function (rooms) {
-      console.log(rooms);
+      //console.log(rooms);
       out.arrayOfRooms = Object.keys(rooms).map(function (room) {
-        return _react2.default.createElement(_rooms2.default, { title: room, count: rooms[room].length });
+        return _react2.default.createElement(_rooms2.default, { title: room, count: rooms[room].length, handleClick: out.handleSelectRoom });
       });
-
       out.forceUpdate();
     });
   },
@@ -69,6 +68,10 @@ var Chaty = _react2.default.createClass({
     });
     this.forceUpdate();
   },
+  handleSelectRoom: function handleSelectRoom(room) {
+    this.socket.emit('selectRoom', room);
+  },
+
   render: function render() {
 
     return _react2.default.createElement(
@@ -85,6 +88,11 @@ var Chaty = _react2.default.createClass({
         _react2.default.createElement(
           'div',
           { className: 'chatRooms' },
+          _react2.default.createElement(
+            'p',
+            { className: 'large' },
+            'rooms'
+          ),
           this.arrayOfRooms
         ),
         _react2.default.createElement(
@@ -130,10 +138,13 @@ module.exports = _react2.default.createClass({
   getInitialState: function getInitialState() {
     return { title: this.props.title, count: this.props.count };
   },
+  handeClick: function handeClick() {
+    this.props.handleClick(this.props.title);
+  },
   render: function render() {
     return _react2.default.createElement(
       "div",
-      { className: "roomButton" },
+      { className: "roomButton", onClick: this.handeClick },
       this.props.title + " : " + this.props.count
     );
   }

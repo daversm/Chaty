@@ -42,23 +42,48 @@ module.exports = {
   },
 
   setChatroom: function(cleanData, socket, socketsObject, chatRooms){
-    if(! (cleanData in chatRooms)){
-      socket.write('- Chat room -' + cleanData + '- not found\n');
-      this.checkIfUsernameChatRoomSet(socket);
+    if(socket.isWebSocket === true){
+      if(! (cleanData in chatRooms)){
+        socket.emit('chat message', 'error entering room');
+        this.checkIfUsernameChatRoomSet(socket);
+      }else{
+        socket.chatRoom === cleanData;
+
+  			chatRooms[cleanData].forEach(function(user){
+          if(socketsObject[user].isWebSocket === true){
+            socketsObject[user].emit('chat message', socket.username + ' ENTERED the room');
+          }else{
+  				  socketsObject[user].write('- '+ socket.username + ' ENTERED the room\n');
+          }
+  			});
+
+        chatRooms[cleanData].push(socket.username);
+        socket.chatRoom = cleanData;
+        socket.emit('chat message', 'You are now in room: ' + cleanData);
+
+        this.checkIfUsernameChatRoomSet(socket);
+  			console.log(Object.keys(socketsObject));
+  			console.log(chatRooms);
+      }
     }else{
-      socket.chatRoom === cleanData;
+      if(! (cleanData in chatRooms)){
+        socket.write('- Chat room -' + cleanData + '- not found\n');
+        this.checkIfUsernameChatRoomSet(socket);
+      }else{
+        socket.chatRoom === cleanData;
 
-			chatRooms[cleanData].forEach(function(user){
-				socketsObject[user].write('- '+ socket.username + ' ENTERED the room\n');
-			});
+  			chatRooms[cleanData].forEach(function(user){
+  				socketsObject[user].write('- '+ socket.username + ' ENTERED the room\n');
+  			});
 
-      chatRooms[cleanData].push(socket.username);
-      socket.chatRoom = cleanData;
-      socket.write('- You are now in room: ' + cleanData + ' (use !USERS to see active users)\n');
+        chatRooms[cleanData].push(socket.username);
+        socket.chatRoom = cleanData;
+        socket.write('- You are now in room: ' + cleanData + ' (use !USERS to see active users)\n');
 
-      this.checkIfUsernameChatRoomSet(socket);
-			console.log(Object.keys(socketsObject));
-			console.log(chatRooms);
+        this.checkIfUsernameChatRoomSet(socket);
+  			console.log(Object.keys(socketsObject));
+  			console.log(chatRooms);
+      }
     }
   }
 
