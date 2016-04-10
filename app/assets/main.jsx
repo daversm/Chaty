@@ -13,11 +13,32 @@ var Chaty = React.createClass({
         <div className="chatBox">
           <div className="chatRooms"></ div>
           <div className="typingBox">
-            <div className="dialog"></div>
+            <div className="dialog">
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+              <p>hi there</p>
+            </div>
             <div className="userType">
               <input
                 type="text"
-                placeholder="username:"
+                placeholder="You:"
                 label="email"
                 value={this.state.email}
                 onChange={this.handleUserNameChange}

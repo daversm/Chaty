@@ -31,13 +31,116 @@ var Chaty = _react2.default.createClass({
         _react2.default.createElement(
           'div',
           { className: 'typingBox' },
-          _react2.default.createElement('div', { className: 'dialog' }),
+          _react2.default.createElement(
+            'div',
+            { className: 'dialog' },
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'hi there'
+            )
+          ),
           _react2.default.createElement(
             'div',
             { className: 'userType' },
             _react2.default.createElement('input', {
               type: 'text',
-              placeholder: 'username:',
+              placeholder: 'You:',
               label: 'email',
               value: this.state.email,
               onChange: this.handleUserNameChange
