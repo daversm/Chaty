@@ -108,7 +108,8 @@ io.on('connection', function(socket){
 	socket.isWebSocket = true;
 	socket.usernameSet = false;
   socket.chatRoom = 'NONE';
-
+	
+	socket.emit('chatRoomsList', chatRooms);
 	socket.emit('chat message', 'Howdy there');
 	socket.emit('chat message', 'Please pick a username');
 

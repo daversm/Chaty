@@ -1,11 +1,13 @@
 import React from 'react';
 import { render } from 'react-dom';
 import io from 'socket.io-client';
+import Rooms from './rooms'
 
 
 var Chaty = React.createClass({
   getInitialState: function(){
     this.arrayOfMsg = [];
+    this.arrayOfRooms = [];
     this.arrayOfMsgToRender = this.arrayOfMsg.map(function(m){
       return(
         <p>{m}</p>
@@ -20,6 +22,18 @@ var Chaty = React.createClass({
     this.socket.on('chat message', function(msg){
       console.log("recived something");
       out.handleUpdateMsgs(msg);
+    });
+
+    this.socket.on('chatRoomsList', function(rooms){
+      console.log(rooms);
+      out.arrayOfRooms = Object.keys(rooms).map(function(room){
+        return (
+          <Rooms title={room} count={rooms[room].length} />
+        )
+      });
+
+      out.forceUpdate();
+
     });
 
   },
@@ -45,7 +59,9 @@ var Chaty = React.createClass({
       <div className="main">
         <div className="title">talkin folk</div>
         <div className="chatBox">
-          <div className="chatRooms"></ div>
+          <div className="chatRooms">
+            {this.arrayOfRooms}
+          </ div>
           <div className="typingBox">
             <div className="dialog">
               {this.arrayOfMsgToRender}
