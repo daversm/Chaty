@@ -2,10 +2,10 @@ module.exports = {
   checkIfUsernameChatRoomSet: function(socket){
     if(socket.isWebSocket === true){
       if (!socket.usernameSet){
-        socket.emit('chat message', 'Pick a username');
+        socket.emit('chat message imp', 'Pick a username');
       }
       else if(socket.chatRoom === 'NONE'){
-        socket.emit('chat message', 'pick a chat room');
+        socket.emit('chat message imp', 'pick a chat room');
       }
     }else{
       if (!socket.usernameSet){
@@ -20,7 +20,7 @@ module.exports = {
   setUsername: function(cleanData, socket, socketsObject){
     if(socket.isWebSocket === true){
       if(cleanData in socketsObject){
-        socket.emit('chat message', 'The username - '+ cleanData + ' - is taken');
+        socket.emit('chat message imp', 'The username - '+ cleanData + ' - is taken');
       }else{
         socket.emit('chat message', 'Alrighty your username : ' + cleanData);
         socket.username = cleanData;
@@ -44,14 +44,14 @@ module.exports = {
   setChatroom: function(cleanData, socket, socketsObject, chatRooms, io){
     if(socket.isWebSocket === true){
       if(! (cleanData in chatRooms)){
-        socket.emit('chat message', 'error entering room');
+        socket.emit('chat message imp', 'error entering room');
         this.checkIfUsernameChatRoomSet(socket);
       }else{
         socket.chatRoom === cleanData;
 
   			chatRooms[cleanData].forEach(function(user){
           if(socketsObject[user].isWebSocket === true){
-            socketsObject[user].emit('chat message', socket.username + ' ENTERED the room');
+            socketsObject[user].emit('chat message imp', socket.username + ' ENTERED the room');
           }else{
   				  socketsObject[user].write('- '+ socket.username + ' ENTERED the room\n');
           }
@@ -59,7 +59,7 @@ module.exports = {
 
         chatRooms[cleanData].push(socket.username);
         socket.chatRoom = cleanData;
-        socket.emit('chat message', 'You are now in room: ' + cleanData);
+        socket.emit('chat message imp', 'You are now in room: ' + cleanData);
 
         this.checkIfUsernameChatRoomSet(socket);
   			console.log(Object.keys(socketsObject));
@@ -75,7 +75,7 @@ module.exports = {
   			chatRooms[cleanData].forEach(function(user){
           if(socketsObject[user].isWebSocket){
             console.log('YUP YUP YUP');
-            socketsObject[user].emit('chat message', socket.username + ' ENTERED the room');
+            socketsObject[user].emit('chat message imp', socket.username + ' ENTERED the room');
           }else{
   				  socketsObject[user].write('- '+ socket.username + ' ENTERED the room\n');
           }

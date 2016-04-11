@@ -123,7 +123,7 @@ io.on('connection', function(socket){
 
 	socket.emit('chatRoomsList', chatRooms);
 	socket.emit('chat message', 'Howdy there');
-	socket.emit('chat message', 'Please pick a username');
+	socket.emit('chat message imp', 'Please pick a username');
 
 	socket.on('chat message', function(msg){
     handleWebSocket(socket, msg);

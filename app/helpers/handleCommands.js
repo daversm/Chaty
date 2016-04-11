@@ -36,7 +36,7 @@ module.exports = {
   			chatRooms[currentRoom].forEach(function(user){
   				console.log(user);
           if(socketsObject[user].isWebSocket === true){
-            socketsObject[user].emit('chat message', socket.username + ' LEFT the room');
+            socketsObject[user].emit('chat message imp', socket.username + ' LEFT the room');
           }else{
   				  socketsObject[user].write('- '+ socket.username + ' LEFT the room\n');
           }
@@ -53,7 +53,7 @@ module.exports = {
   			chatRooms[currentRoom].forEach(function(user){
   				console.log(user);
           if(socketsObject[user].isWebSocket === true){
-            socketsObject[user].emit('chat message', socket.username + ' LEFT the room');
+            socketsObject[user].emit('chat message imp', socket.username + ' LEFT the room');
           }else{
   				  socketsObject[user].write('- '+ socket.username + ' LEFT the room\n');
           }
@@ -111,7 +111,7 @@ module.exports = {
 			socket.chatRoom = 'NONE';
 			chatRooms[currentRoom].forEach(function(user){
         if(socketsObject[user].isWebSocket){
-  				socketsObject[user].emit('chat message', socket.username + ' LEFT the room');
+  				socketsObject[user].emit('chat message imp', socket.username + ' LEFT the room');
   			}else{
 				  socketsObject[user].write('- '+ socket.username + ' LEFT the room\n');
         }

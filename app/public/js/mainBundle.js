@@ -7,6 +7,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = require('react-dom');
 
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
 var _socket = require('socket.io-client');
 
 var _socket2 = _interopRequireDefault(_socket);
@@ -32,31 +34,55 @@ var Chaty = _react2.default.createClass({
     });
     return { currentChatRoom: 'NONE', userName: '', msg: "" };
   },
+  componentDidUpdate: function componentDidUpdate() {
+    //var node = ReactDOM.findDOMNode(this.refs.dialog);
+    //console.log(this.refs.dialog);
+    this.refs.dialog.scrollTop = this.refs.dialog.scrollHeight;
+  },
   componentDidMount: function componentDidMount() {
     this.socket = (0, _socket2.default)();
     var out = this;
 
     this.socket.on('chat message', function (msg) {
-      console.log("recived something");
+
       out.handleUpdateMsgs(msg);
     });
 
+    this.socket.on('chat message imp', function (msg) {
+
+      out.handleUpdateMsgsImp(msg);
+    });
+
     this.socket.on('chatRoomsList', function (rooms) {
-      //console.log(rooms);
       out.arrayOfRooms = Object.keys(rooms).map(function (room) {
         return _react2.default.createElement(_rooms2.default, { title: room, count: rooms[room].length, handleClick: out.handleSelectRoom });
       });
       out.forceUpdate();
     });
   },
-  handleSend: function handleSend() {
-    this.setState({ msg: '' });
-    this.socket.emit('chat message', this.state.msg);
+  handleSend: function handleSend(e) {
+    e.preventDefault();
+    if (this.state.msg !== "") {
+      this.setState({ msg: '' });
+      this.socket.emit('chat message', this.state.msg);
+    }
   },
   handleInput: function handleInput(e) {
     this.setState({ msg: e.target.value });
   },
   handleUpdateMsgs: function handleUpdateMsgs(msg) {
+    this.arrayOfMsg.push(msg);
+    this.arrayOfMsgToRender = this.arrayOfMsg.map(function (m) {
+      return _react2.default.createElement(
+        'p',
+        null,
+        '> ',
+        m
+      );
+    });
+    this.forceUpdate();
+  },
+  handleUpdateMsgsImp: function handleUpdateMsgsImp(msg) {
     this.arrayOfMsg.push(msg);
     this.arrayOfMsgToRender = this.arrayOfMsg.map(function (m) {
       return _react2.default.createElement(
@@ -69,6 +95,7 @@ var Chaty = _react2.default.createClass({
     this.forceUpdate();
   },
   handleSelectRoom: function handleSelectRoom(room) {
+    console.log("clicked");
     this.socket.emit('selectRoom', room);
   },
 
@@ -100,12 +127,12 @@ var Chaty = _react2.default.createClass({
           { className: 'typingBox' },
           _react2.default.createElement(
             'div',
-            { className: 'dialog' },
+            { ref: 'dialog', key: 'dialog', className: 'dialog' },
             this.arrayOfMsgToRender
           ),
           _react2.default.createElement(
-            'div',
-            { className: 'userType' },
+            'form',
+            { className: 'userType', onSubmit: this.handleSend },
             _react2.default.createElement('input', {
               type: 'text',
               placeholder: 'You:',
@@ -113,7 +140,7 @@ var Chaty = _react2.default.createClass({
               value: this.state.msg,
               onChange: this.handleInput
             }),
-            _react2.default.createElement('input', { id: 'doneButton', type: 'submit', value: 'send', onClick: this.handleSend })
+            _react2.default.createElement('input', { id: 'doneButton', type: 'submit', value: 'send' })
           )
         )
       )
@@ -121,7 +148,7 @@ var Chaty = _react2.default.createClass({
   }
 });
 
-(0, _reactDom.render)(_react2.default.createElement(Chaty, null), document.getElementById('chatyDiv'));
+_reactDom2.default.render(_react2.default.createElement(Chaty, null), document.getElementById('chatyDiv'));
 
 },{"./rooms":2,"react":191,"react-dom":62,"socket.io-client":192}],2:[function(require,module,exports){
 "use strict";
