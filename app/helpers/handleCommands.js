@@ -18,9 +18,11 @@ module.exports = {
     else if(chatRooms[socket.chatRoom].indexOf(sendToUser) != -1){
       var msg = arrayOfData.slice(2, arrayOfData.length).join(" ");
       if(socketsObject[sendToUser].isWebSocket){
-        socketsObject[sendToUser].emit('chat message', '> PRIAVTE message from: '+ socket.username + ': ' + msg);
+        socketsObject[sendToUser].emit('chat message', '> PRIVATE message from: '+ socket.username + ': ' + msg);
+        socketInRoom.write('- ' + socket.username + 'PRIVATE: ' + msg + '\n');
       }else{
         socketsObject[sendToUser].write('- PRIVATE message from ' + socket.username + ': ' + msg +'\n' );
+        socketInRoom.write('- ' + socket.username + 'PRIVATE: ' + msg + '\n');
       }
     }
     else{
