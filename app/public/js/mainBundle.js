@@ -35,8 +35,6 @@ var Chaty = _react2.default.createClass({
     return { currentChatRoom: 'NONE', userName: '', msg: "" };
   },
   componentDidUpdate: function componentDidUpdate() {
-    //var node = ReactDOM.findDOMNode(this.refs.dialog);
-    //console.log(this.refs.dialog);
     this.refs.dialog.scrollTop = this.refs.dialog.scrollHeight;
   },
   componentDidMount: function componentDidMount() {
@@ -95,7 +93,7 @@ var Chaty = _react2.default.createClass({
     this.forceUpdate();
   },
   handleSelectRoom: function handleSelectRoom(room) {
-    console.log("clicked");
+    //console.log("clicked");
     this.socket.emit('selectRoom', room);
   },
 

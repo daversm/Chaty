@@ -16,8 +16,6 @@ var Chaty = React.createClass({
     return( {currentChatRoom:'NONE', userName:'', msg: "" });
   },
   componentDidUpdate: function() {
-    //var node = ReactDOM.findDOMNode(this.refs.dialog);
-    //console.log(this.refs.dialog);
     this.refs.dialog.scrollTop = this.refs.dialog.scrollHeight;
   },
   componentDidMount: function(){
@@ -75,7 +73,7 @@ var Chaty = React.createClass({
     this.forceUpdate();
   },
   handleSelectRoom(room){
-    console.log("clicked");
+    //console.log("clicked");
     this.socket.emit('selectRoom', room);
   },
   render:function(){
@@ -110,6 +108,6 @@ var Chaty = React.createClass({
 });
 
 ReactDOM.render(
-<Chaty />,
-document.getElementById('chatyDiv')
+  <Chaty />,
+  document.getElementById('chatyDiv')
 );
