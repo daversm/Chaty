@@ -19,10 +19,10 @@ module.exports = {
       var msg = arrayOfData.slice(2, arrayOfData.length).join(" ");
       if(socketsObject[sendToUser].isWebSocket){
         socketsObject[sendToUser].emit('chat message', '> PRIVATE message from: '+ socket.username + ': ' + msg);
-        socket.write('- ' + socket.username + 'PRIVATE: ' + msg + '\n');
+        socket.write('- ' + socket.username + ' PRIVATE: ' + msg + '\n');
       }else{
         socketsObject[sendToUser].write('- PRIVATE message from ' + socket.username + ': ' + msg +'\n' );
-        socket.write('- ' + socket.username + 'PRIVATE: ' + msg + '\n');
+        socket.write('- ' + socket.username + ' PRIVATE: ' + msg + '\n');
       }
     }
     else{
@@ -85,6 +85,8 @@ module.exports = {
     socket.write('- !USERS : list of users in room \n');
 		socket.write('- !ROOMS : list of rooms \n');
 		socket.write('- !HELP : list of commands \n');
+    socket.write('- !PRIVATE : send msg to specific user in room \n');
+    socket.write('- !PRIVATE : usage: !PRIVATE NameOfUser MessageToSend \n');
     this.checkIfUsernameChatRoomSet(socket);
   },
   handleUsers: function(socket, chatRooms){
