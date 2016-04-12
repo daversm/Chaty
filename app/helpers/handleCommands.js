@@ -17,7 +17,11 @@ module.exports = {
     }
     else if(chatRooms[socket.chatRoom].indexOf(sendToUser) != -1){
       var msg = arrayOfData.slice(2, arrayOfData.length).join(" ");
-      socketsObject[sendToUser].write('- PRIVATE message from ' + socket.username + ': ' + msg +'\n' );
+      if(socketsObject[sendToUser].isWebSocket){
+        socketsObject[sendToUser].emit('chat message', '> PRIAVTE message from: '+ socket.username + ': ' + msg);
+      }else{
+        socketsObject[sendToUser].write('- PRIVATE message from ' + socket.username + ': ' + msg +'\n' );
+      }
     }
     else{
       socket.write('- user: ' + sendToUser + ' is not in this room\n');
