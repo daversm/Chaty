@@ -72,7 +72,10 @@ function handleWebSocket(socket, msg){
 
 	if(socket.usernameSet === false){
 		isUserAndRoomSet.setUsername(cleanData, socket, socketsObject);
-	}else{
+	}else if(socket.chatRoom === 'NONE'){
+		isUserAndRoomSet.checkIfUsernameChatRoomSet(socket);
+	}
+	else{
 		var usersInRoom = chatRooms[socket.chatRoom];
 
 	  usersInRoom.forEach(function(user){

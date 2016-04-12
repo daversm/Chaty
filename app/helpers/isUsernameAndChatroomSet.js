@@ -5,7 +5,7 @@ module.exports = {
         socket.emit('chat message imp', 'Pick a username');
       }
       else if(socket.chatRoom === 'NONE'){
-        socket.emit('chat message imp', 'pick a chat room');
+        socket.emit('chat message imp', 'click a chat room from the rooms section');
       }
     }else{
       if (!socket.usernameSet){
