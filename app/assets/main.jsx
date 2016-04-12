@@ -60,7 +60,7 @@ var Chaty = React.createClass({
     this.arrayOfMsg.push(msg);
     this.arrayOfMsgToRender = this.arrayOfMsg.map(function(m){
       return(
-        <p >> {m}</p>
+        <div className="txt">> {m}</div>
       )
     });
     this.forceUpdate();
@@ -69,7 +69,7 @@ var Chaty = React.createClass({
     this.arrayOfMsg.push(msg);
     this.arrayOfMsgToRender = this.arrayOfMsg.map(function(m){
       return(
-        <p className="small">> {m}</p>
+        <div className="txt">> {m}</div>
       )
     });
     this.forceUpdate();

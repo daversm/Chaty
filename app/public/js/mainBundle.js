@@ -87,7 +87,7 @@ var Chaty = _react2.default.createClass({
     this.arrayOfMsgToRender = this.arrayOfMsg.map(function (m) {
       return _react2.default.createElement(
         'p',
-        { className: 'small' },
+        null,
         '> ',
         m
       );

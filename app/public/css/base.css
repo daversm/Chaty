@@ -7,10 +7,6 @@ body, html {
   width: 100%;
   -webkit-font-smoothing: antialiased;
 }
-p.small{
-
-
-}
 
 p.large{
   font-family: 'Quicksand', sans-serif;
@@ -23,6 +19,11 @@ p.large{
 p{
   margin-top:0em;
   margin-bottom:1em;
+}
+
+.txt{
+  width: 100%;
+  height: 10px;
 }
 
 #chatyDiv{
