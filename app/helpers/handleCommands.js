@@ -19,10 +19,10 @@ module.exports = {
       var msg = arrayOfData.slice(2, arrayOfData.length).join(" ");
       if(socketsObject[sendToUser].isWebSocket){
         socketsObject[sendToUser].emit('chat message', '> PRIVATE message from: '+ socket.username + ': ' + msg);
-        socketInRoom.write('- ' + socket.username + 'PRIVATE: ' + msg + '\n');
+        socket.write('- ' + socket.username + 'PRIVATE: ' + msg + '\n');
       }else{
         socketsObject[sendToUser].write('- PRIVATE message from ' + socket.username + ': ' + msg +'\n' );
-        socketInRoom.write('- ' + socket.username + 'PRIVATE: ' + msg + '\n');
+        socket.write('- ' + socket.username + 'PRIVATE: ' + msg + '\n');
       }
     }
     else{
