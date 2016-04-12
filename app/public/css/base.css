@@ -11,16 +11,18 @@ p.small{
 
 
 }
-p{
-  margin-top:0em;
-  margin-bottom:1em;
-}
+
 p.large{
   font-family: 'Quicksand', sans-serif;
   font-size: 25px;
   color: gray;
   font-weight: 400;
   margin-bottom: 10px;
+}
+
+p{
+  margin-top:0em;
+  margin-bottom:1em;
 }
 
 #chatyDiv{
