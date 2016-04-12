@@ -74,8 +74,8 @@ var Chaty = _react2.default.createClass({
     this.arrayOfMsg.push(msg);
     this.arrayOfMsgToRender = this.arrayOfMsg.map(function (m) {
       return _react2.default.createElement(
-        'p',
-        null,
+        'div',
+        { className: 'txt' },
         '> ',
         m
       );
@@ -86,8 +86,8 @@ var Chaty = _react2.default.createClass({
     this.arrayOfMsg.push(msg);
     this.arrayOfMsgToRender = this.arrayOfMsg.map(function (m) {
       return _react2.default.createElement(
-        'p',
-        null,
+        'div',
+        { className: 'txt' },
         '> ',
         m
       );
